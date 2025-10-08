@@ -4,8 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Setup Fenster</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 20%;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+</style>
 </head>
 <body>
+
 <h1>Setup Fenster</h1>
 <p>Klicke den Button, um das Triple-Click-Fenster zu öffnen:</p>
 <button onclick="openTripleClickWindow()">Öffne Triple-Click Fenster</button>
@@ -21,8 +34,26 @@ function openTripleClickWindow() {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Triple Click Fenster</title>
             <style>
-                body { font-family: Arial, sans-serif; text-align: center; margin-top: 20%; }
-                input { font-size: 1em; padding: 5px; width: 80%; }
+                body {
+                    font-family: Arial, sans-serif;
+                    text-align: center;
+                    margin-top: 10%;
+                    height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    color: white;
+                    transition: background 0.5s;
+                }
+                input {
+                    font-size: 1em;
+                    padding: 5px;
+                    width: 80%;
+                    margin-top: 20px;
+                    border: none;
+                    border-radius: 5px;
+                }
             </style>
         </head>
         <body>
@@ -32,16 +63,26 @@ function openTripleClickWindow() {
             <script>
                 let clicks = 0;
                 let timer;
+
+                // Triple Click
                 document.addEventListener('click', (e) => {
-                    // Klick auf Textfeld ignorieren
-                    if(e.target.tagName === 'INPUT') return;
+                    if(e.target.tagName === 'INPUT') return; // Textfeld ignorieren
                     clicks++;
                     if (clicks === 3) {
-                        window.close(); // Fenster schließt sich
+                        window.close();
                     }
                     clearTimeout(timer);
                     timer = setTimeout(() => clicks = 0, 500);
                 });
+
+                // Regenbogen-Hintergrund Animation
+                let hue = 0;
+                function animateRainbow() {
+                    document.body.style.background = 'hsl(' + hue + ', 80%, 50%)';
+                    hue = (hue + 1) % 360;
+                    requestAnimationFrame(animateRainbow);
+                }
+                animateRainbow();
             <\/script>
         </body>
         </html>
