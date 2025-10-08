@@ -3,40 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Triple Click Close</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 20%;
-    transition: background 0.5s;
-  }
-  .closed {
-    background: black;
-    color: white;
-    font-size: 2em;
-  }
-</style>
+<title>Setup Fenster</title>
 </head>
 <body>
-
-<h1>demo</h1>
-<p>Klicke dreimal schnell, um die Seite „zu schließen“.</p>
+<h1>Setup Fenster</h1>
+<p>Das Triple-Click Fenster öffnet sich automatisch.</p>
 
 <script>
-let clicks = 0;
-let timer;
-
-document.addEventListener('click', () => {
-    clicks++;
-    if (clicks === 3) {
-        // Fake-Close
-        document.body.innerHTML = "<h1>Tab geschlossen</h1>";
-        document.body.classList.add('closed');
-    }
-    clearTimeout(timer);
-    timer = setTimeout(() => clicks = 0, 500); // Reset nach 500ms
-});
+// Neues Fenster beim Laden automatisch öffnen
+window.onload = function() {
+    const tripleWin = window.open("", "", "width=400,height=300");
+    tripleWin.document.write(`
+        <!DOCTYPE html>
+        <html lang="de">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Triple Click Fenster</title>
+            <style>
+                body { font-family: Arial, sans-serif; text-align: center; margin-top: 20%; }
+                input { font-size: 1em; padding: 5px; width: 80%; }
+            </style>
+        </head>
+        <body>
+            <h1>Triple Click Test</h1>
+            <p>Klicke dreimal schnell irgendwo, um dieses Fenster zu schließen.</p>
+            <input type="text" placeholder="Hier tippen...">
+            <script>
+                let clicks = 0;
+                let timer;
+                document.addEventListener('click', () => {
+                    clicks++;
+                    if (clicks === 3) {
+                        window.close(); // Fenster schließt sich
+                    }
+                    clearTimeout(timer);
+                    timer = setTimeout(() => clicks = 0, 500); // Reset nach 500ms
+                });
+            <\/script>
+        </body>
+        </html>
+    `);
+};
 </script>
 
 </body>
