@@ -3,32 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Triple Click Test</title>
+<title>Triple Click Close</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 20%;
+    transition: background 0.5s;
+  }
+  .closed {
+    background: black;
+    color: white;
+    font-size: 2em;
+  }
+</style>
 </head>
 <body>
 
-<button onclick="openWindow()">Open Window</button>
+<h1>demo</h1>
+<p>Klicke dreimal schnell, um die Seite „zu schließen“.</p>
 
 <script>
-function openWindow() {
-    const myWindow = window.open("", "", "width=400,height=300");
-    myWindow.document.write(`
-        <h1>Triple Click Test</h1>
-        <p>Klicke dreimal schnell, um zu schließen.</p>
-        <script>
-            let clicks = 0;
-            let timer;
-            document.addEventListener('click', () => {
-                clicks++;
-                if (clicks === 3) {
-                    window.close();
-                }
-                clearTimeout(timer);
-                timer = setTimeout(() => clicks = 0, 500);
-            });
-        <\/script>
-    `);
-}
+let clicks = 0;
+let timer;
+
+document.addEventListener('click', () => {
+    clicks++;
+    if (clicks === 3) {
+        // Fake-Close
+        document.body.innerHTML = "<h1>Tab geschlossen</h1>";
+        document.body.classList.add('closed');
+    }
+    clearTimeout(timer);
+    timer = setTimeout(() => clicks = 0, 500); // Reset nach 500ms
+});
 </script>
 
 </body>
