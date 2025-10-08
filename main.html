@@ -7,11 +7,11 @@
 </head>
 <body>
 <h1>Setup Fenster</h1>
-<p>Das Triple-Click Fenster öffnet sich automatisch.</p>
+<p>Klicke den Button, um das Triple-Click-Fenster zu öffnen:</p>
+<button onclick="openTripleClickWindow()">Öffne Triple-Click Fenster</button>
 
 <script>
-// Neues Fenster beim Laden automatisch öffnen
-window.onload = function() {
+function openTripleClickWindow() {
     const tripleWin = window.open("", "", "width=400,height=300");
     tripleWin.document.write(`
         <!DOCTYPE html>
@@ -27,24 +27,26 @@ window.onload = function() {
         </head>
         <body>
             <h1>Triple Click Test</h1>
-            <p>Klicke dreimal schnell irgendwo, um dieses Fenster zu schließen.</p>
+            <p>Klicke dreimal schnell irgendwo (außer im Textfeld), um dieses Fenster zu schließen.</p>
             <input type="text" placeholder="Hier tippen...">
             <script>
                 let clicks = 0;
                 let timer;
-                document.addEventListener('click', () => {
+                document.addEventListener('click', (e) => {
+                    // Klick auf Textfeld ignorieren
+                    if(e.target.tagName === 'INPUT') return;
                     clicks++;
                     if (clicks === 3) {
                         window.close(); // Fenster schließt sich
                     }
                     clearTimeout(timer);
-                    timer = setTimeout(() => clicks = 0, 500); // Reset nach 500ms
+                    timer = setTimeout(() => clicks = 0, 500);
                 });
             <\/script>
         </body>
         </html>
     `);
-};
+}
 </script>
 
 </body>
