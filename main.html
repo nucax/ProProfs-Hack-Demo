@@ -1,1 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triple Click Test</title>
+</head>
+<body>
 
+<button onclick="openWindow()">Open Window</button>
+
+<script>
+function openWindow() {
+    const myWindow = window.open("", "", "width=400,height=300");
+    myWindow.document.write(`
+        <h1>Triple Click Test</h1>
+        <p>Klicke dreimal schnell, um zu schließen.</p>
+        <script>
+            let clicks = 0;
+            let timer;
+            document.addEventListener('click', () => {
+                clicks++;
+                if (clicks === 3) {
+                    window.close();
+                }
+                clearTimeout(timer);
+                timer = setTimeout(() => clicks = 0, 500);
+            });
+        <\/script>
+    `);
+}
+</script>
+
+</body>
+</html>
