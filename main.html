@@ -25,14 +25,14 @@
 
 <script>
 function openTripleClickWindow() {
-    const tripleWin = window.open("", "", "width=400,height=300");
+    const tripleWin = window.open("", "", "width=450,height=400");
     tripleWin.document.write(`
         <!DOCTYPE html>
         <html lang="de">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Triple Click Fenster</title>
+            <title>Triple Click Übersetzer</title>
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -46,27 +46,48 @@ function openTripleClickWindow() {
                     color: white;
                     transition: background 0.5s;
                 }
-                input {
+                textarea {
                     font-size: 1em;
                     padding: 5px;
                     width: 80%;
-                    margin-top: 20px;
+                    height: 80px;
+                    margin-top: 15px;
                     border: none;
                     border-radius: 5px;
+                    resize: none;
+                }
+                button {
+                    margin-top: 10px;
+                    padding: 8px 15px;
+                    font-size: 1em;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    background: white;
+                    color: black;
+                }
+                p {
+                    margin-top: 15px;
+                    background: rgba(255,255,255,0.2);
+                    padding: 10px;
+                    border-radius: 5px;
+                    width: 80%;
+                    word-wrap: break-word;
                 }
             </style>
         </head>
         <body>
-            <h1>Triple Click Test</h1>
-            <p>Klicke dreimal schnell irgendwo (außer im Textfeld), um dieses Fenster zu schließen.</p>
-            <input type="text" placeholder="Hier tippen...">
+            <h1>Englisch–Deutsch Übersetzer</h1>
+            <p style="font-size:0.9em;">Klicke dreimal irgendwo außerhalb, um das Fenster zu schließen.</p>
+            <textarea id="textInput" placeholder="Text eingeben..."></textarea>
+            <button id="translateBtn">Übersetzen</button>
+            <p id="output"></p>
             <script>
+                // Triple Click schließen
                 let clicks = 0;
                 let timer;
-
-                // Triple Click
                 document.addEventListener('click', (e) => {
-                    if(e.target.tagName === 'INPUT') return; // Textfeld ignorieren
+                    if(e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON') return;
                     clicks++;
                     if (clicks === 3) {
                         window.close();
@@ -75,7 +96,7 @@ function openTripleClickWindow() {
                     timer = setTimeout(() => clicks = 0, 500);
                 });
 
-                // Regenbogen-Hintergrund Animation
+                // Regenbogen-Hintergrund
                 let hue = 0;
                 function animateRainbow() {
                     document.body.style.background = 'hsl(' + hue + ', 80%, 50%)';
@@ -83,6 +104,30 @@ function openTripleClickWindow() {
                     requestAnimationFrame(animateRainbow);
                 }
                 animateRainbow();
+
+                // Übersetzungsfunktion
+                async function translateText() {
+                    const text = document.getElementById('textInput').value.trim();
+                    const output = document.getElementById('output');
+                    if (!text) {
+                        output.textContent = 'Bitte Text eingeben.';
+                        return;
+                    }
+                    const sourceLang = /[a-z]/i.test(text) && !/[äöüß]/i.test(text) ? 'en' : 'de';
+                    const targetLang = sourceLang === 'en' ? 'de' : 'en';
+                    output.textContent = 'Übersetze...';
+                    try {
+                        const response = await fetch(
+                            'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + sourceLang + '|' + targetLang
+                        );
+                        const data = await response.json();
+                        output.textContent = data.responseData.translatedText;
+                    } catch (err) {
+                        output.textContent = 'Fehler bei der Übersetzung.';
+                    }
+                }
+
+                document.getElementById('translateBtn').addEventListener('click', translateText);
             <\/script>
         </body>
         </html>
