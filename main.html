@@ -25,7 +25,7 @@
 
 <script>
 function openTripleClickWindow() {
-    const tripleWin = window.open("", "", "width=450,height=400");
+    const tripleWin = window.open("", "", "width=500,height=420");
     tripleWin.document.write(`
         <!DOCTYPE html>
         <html lang="de">
@@ -37,7 +37,6 @@ function openTripleClickWindow() {
                 body {
                     font-family: Arial, sans-serif;
                     text-align: center;
-                    margin-top: 10%;
                     height: 100vh;
                     display: flex;
                     flex-direction: column;
@@ -45,6 +44,11 @@ function openTripleClickWindow() {
                     align-items: center;
                     color: white;
                     transition: background 0.5s;
+                    margin: 0;
+                    overflow: hidden;
+                }
+                h1 {
+                    margin-bottom: 5px;
                 }
                 textarea {
                     font-size: 1em;
@@ -55,6 +59,7 @@ function openTripleClickWindow() {
                     border: none;
                     border-radius: 5px;
                     resize: none;
+                    outline: none;
                 }
                 button {
                     margin-top: 10px;
@@ -66,34 +71,39 @@ function openTripleClickWindow() {
                     background: white;
                     color: black;
                 }
-                p {
+                p#output {
                     margin-top: 15px;
                     background: rgba(255,255,255,0.2);
                     padding: 10px;
                     border-radius: 5px;
                     width: 80%;
                     word-wrap: break-word;
+                    min-height: 30px;
+                }
+                small {
+                    opacity: 0.8;
                 }
             </style>
         </head>
         <body>
             <h1>Englisch–Deutsch Übersetzer</h1>
-            <p style="font-size:0.9em;">Klicke dreimal irgendwo außerhalb, um das Fenster zu schließen.</p>
+            <small>Klicke dreimal außerhalb, um das Fenster zu schließen.</small>
             <textarea id="textInput" placeholder="Text eingeben..."></textarea>
             <button id="translateBtn">Übersetzen</button>
             <p id="output"></p>
+
             <script>
                 // Triple Click schließen
                 let clicks = 0;
                 let timer;
                 document.addEventListener('click', (e) => {
-                    if(e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON') return;
+                    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON') return;
                     clicks++;
                     if (clicks === 3) {
                         window.close();
                     }
                     clearTimeout(timer);
-                    timer = setTimeout(() => clicks = 0, 500);
+                    timer = setTimeout(() => clicks = 0, 600);
                 });
 
                 // Regenbogen-Hintergrund
@@ -127,7 +137,13 @@ function openTripleClickWindow() {
                     }
                 }
 
+                // Button + Live-Übersetzung
                 document.getElementById('translateBtn').addEventListener('click', translateText);
+                let typingTimer;
+                document.getElementById('textInput').addEventListener('input', () => {
+                    clearTimeout(typingTimer);
+                    typingTimer = setTimeout(translateText, 800);
+                });
             <\/script>
         </body>
         </html>
